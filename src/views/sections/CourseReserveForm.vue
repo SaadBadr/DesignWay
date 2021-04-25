@@ -303,10 +303,8 @@
 
     methods: {
       submit () {
-        console.log(console.log(process.env.VUE_APP_FAWATERK_API_KEY))
         this.$v.$touch()
 
-        console.log(this.$v.$invalid)
         if (this.$v.$invalid) return
         this.nextPage = true
       },
@@ -324,7 +322,7 @@
         var data = new FormData()
         data.append(
           'vendorKey',
-          '39c7b8bee112c83c763ea7172db149ea69839b49be545ccacb',
+          'process.env.VUE_APP_FAWATERK_API_KEY',
         )
         data.append('cartItems[0][name]', `${this.selected_course} - حجز قدرات`)
         data.append('cartItems[0][price]', '50')
@@ -354,7 +352,6 @@
 
         axios(config)
           .then(function (response) {
-            console.log(JSON.stringify(response.data))
             window.location.href = response.data.url
           })
           .catch(function (error) {

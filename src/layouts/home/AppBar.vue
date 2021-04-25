@@ -51,7 +51,7 @@
     data: () => ({
       drawer: null,
       items: [
-        { title: 'حجز الكورسات', route: 'Course-reservation' },
+        { title: 'حجز الكورسات', route: 'course-reservation' },
         { title: 'الرئيسية', route: '/' },
       ],
     }),

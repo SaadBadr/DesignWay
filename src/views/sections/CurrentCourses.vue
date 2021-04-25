@@ -1,8 +1,6 @@
 <template>
   <base-section id="current-courses">
-    <base-section-heading title="الكورسات الحالية">
-      كورسات جامدة جدا
-    </base-section-heading>
+    <base-section-heading title="الكورسات الحالية" />
 
     <v-container>
       <v-row>
@@ -15,10 +13,7 @@
           <base-avatar-card
             v-bind="course"
             align="center"
-          >
-            كورس ممتاز جدا طبعاكورس ممتاز جدا طبعاكورس ممتاز جدا طبعاكورس ممتاز
-            جدا طبعا
-          </base-avatar-card>
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -33,20 +28,26 @@
       courses: [
         {
           title: 'فنون تطبيقية',
+          text: 'طريقك للتصميم والهندسة لمختلف المجالات في الحياة',
         },
         {
           title: 'فنون جميلة',
+          text: 'اقصر طريق للفن و الجمال والذوق في تكوين شخصيه الفنان',
         },
         {
           color: 'primary',
           dark: true,
           title: 'فنون عمارة',
+          text:
+            'هنا المزيج بين الفن والهندسة لاخراج مهندس معماري مميز ملم بجميع النواحي الفنية',
         },
         {
           title: 'تربية فنية',
+          text: 'لأن الفن رساله فدورك توصله وتطور فيه',
         },
         {
           title: 'اعلام',
+          text: 'طريق الشهرة وتصحيح فكر الشعوب والمعرفه بكل بلاد العالم',
         },
       ],
     }),

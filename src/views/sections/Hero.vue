@@ -49,7 +49,7 @@
             </base-btn>
 
             <span class="font-weight-bold ml-6 mr-4 my-4" />
-            <base-btn to="Course-reservation">
+            <base-btn to="course-reservation">
               حجز الكورسات
             </base-btn>
           </div>

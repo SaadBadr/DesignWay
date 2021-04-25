@@ -14,17 +14,18 @@
           <div
             class="d-flex flex-wrap justify-md-start justify-center justify-md-none"
           >
-            <template v-for="(s, i) in social">
+            <template v-for="(url, title, i) in social">
               <a
-                :key="s"
-                class="white--text pa-1 pa-md-0"
-                href="#"
-                v-text="s"
+                :key="title"
+                class="white--text px-1 py-md-0"
+                :href="url"
+                target="_blank"
+                v-text="title"
               />
 
               <v-responsive
                 v-if="i < social.length - 1"
-                :key="`divider-${s}`"
+                :key="`divider-${title}`"
                 class="mx-4 shrink hidden-sm-and-down"
                 max-height="24"
               >
@@ -51,7 +52,12 @@
     name: 'HomeFooter',
 
     data: () => ({
-      social: ['Facebook', 'Twitter', 'Instagram', 'Linkedin'],
+      social: {
+        Facebook: 'https://www.facebook.com/designawycourses/',
+        Instagram: 'https://instagram.com/design.way_?igshid=16ba7q5s5hebm',
+        Telegram: 'https://t.me/Design_way',
+        Youtube: 'https://www.youtube.com/channel/UC-TKcZ4KYMT24tINpVqwYfg',
+      },
     }),
   }
 </script>

@@ -19,13 +19,13 @@
       <v-btn
         class="font-weight-bold"
         color="white"
-        href="https://facebook.com/design_way"
+        href="https://www.facebook.com/groups/251019392512811/?ref=share&exp=e8c2"
         light
         min-width="168"
         target="_blank"
         x-large
       >
-        تابعنا
+        جروبنا على الفيسبوك
 
         <v-icon right>
           mdi-open-in-new

@@ -24,10 +24,10 @@ const router = new Router({
           component: () => import('@/views/home/Index.vue'),
         },
         {
-          path: 'Course-reservation',
+          path: 'course-reservation',
           name: 'Course reservation',
           component: () => import('@/views/course-reservation/Index.vue'),
-          meta: { src: require('@/assets/pro.jpg') },
+          meta: { src: require('@/assets/logo.png') },
         },
       ],
     },
