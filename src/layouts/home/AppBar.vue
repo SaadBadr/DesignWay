@@ -9,7 +9,7 @@
     >
       <base-img
         :src="require('@/assets/logo.png')"
-        class="ml-8 hidden-xs-only"
+        class="ml-8"
         contain
         max-width="70"
         width="100%"
@@ -18,7 +18,6 @@
 
       <div>
         <v-tabs
-          :class="!drawer ? 'hidden-sm-and-down' : ''"
           optional
           background-color="transparent"
         >
@@ -35,11 +34,6 @@
           </v-tab>
         </v-tabs>
       </div>
-
-      <v-app-bar-nav-icon
-        class="hidden-md-and-up"
-        @click="drawer = !drawer"
-      />
     </v-app-bar>
   </div>
 </template>
@@ -49,7 +43,6 @@
     name: 'HomeAppBar',
 
     data: () => ({
-      drawer: null,
       items: [
         { title: 'حجز الكورسات', route: 'course-reservation' },
         { title: 'الرئيسية', route: '/' },
