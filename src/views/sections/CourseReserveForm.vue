@@ -72,7 +72,7 @@
               color="orange"
               text-color="white"
             >
-              سعر الحجز 50 ج.م
+              سعر الحجز {{ price }} ج.م
               <v-icon right>
                 mdi-star
               </v-icon>
@@ -147,9 +147,7 @@
         </h4>
 
         <h4 class="text-center my-5">
-          <u>
-            سعر الحجز: 50 ج.م
-          </u>
+          <u> سعر الحجز: {{ price }} ج.م </u>
         </h4>
         <v-btn
           outlined
@@ -176,7 +174,7 @@
   import { validationMixin } from 'vuelidate'
   import { required, maxLength, email, numeric } from 'vuelidate/lib/validators'
   import axios from 'axios'
-
+  // const price = 50
   export default {
     name: 'SectionCourseReservation',
     components: {},
@@ -240,6 +238,9 @@
     }),
 
     computed: {
+      price () {
+        return 50
+      },
       checkboxErrors () {
         const errors = []
         if (!this.$v.checkbox.$dirty) return errors
@@ -300,7 +301,6 @@
         return errors
       },
     },
-
     methods: {
       submit () {
         this.$v.$touch()
@@ -320,14 +320,11 @@
       },
       payment () {
         var data = new FormData()
-        data.append(
-          'vendorKey',
-          'process.env.VUE_APP_FAWATERK_API_KEY',
-        )
+        data.append('vendorKey', process.env.VUE_APP_FAWATERK_API_KEY)
         data.append('cartItems[0][name]', `${this.selected_course} - حجز قدرات`)
-        data.append('cartItems[0][price]', '50')
+        data.append('cartItems[0][price]', this.price)
         data.append('cartItems[0][quantity]', '1')
-        data.append('cartTotal', '50')
+        data.append('cartTotal', this.price)
         data.append('shipping', '0')
         data.append('customer[first_name]', this.firstName)
         data.append('customer[last_name]', this.lastName)
@@ -337,7 +334,7 @@
           'customer[address]',
           `${this.selected_center} - ${this.selected_city}`,
         )
-        data.append('redirectUrl', 'https://www.fawaterk.com')
+        data.append('redirectUrl', 'http://www.designwaycourses.com/')
         data.append('currency', 'EGP')
 
         var config = {
