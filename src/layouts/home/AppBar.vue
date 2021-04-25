@@ -9,7 +9,7 @@
     >
       <base-img
         :src="require('@/assets/logo.png')"
-        class="ml-8"
+        class="ml-4"
         contain
         max-width="70"
         width="100%"
