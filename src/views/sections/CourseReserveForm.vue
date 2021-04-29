@@ -149,6 +149,7 @@
         <h4 class="text-center my-5">
           <u> سعر الحجز: {{ price }} ج.م </u>
         </h4>
+
         <v-btn
           outlined
           color="success"
@@ -165,6 +166,11 @@
         >
           عودة
         </v-btn>
+
+        <h6 class="text-right my-10">
+          في حالة وجود مشكلة في الدفع تقدر تكلمنا او تبعتلنا على الواتساب هنا
+          <a href="tel:01091752592">01091752592</a>
+        </h6>
       </div>
     </v-card>
   </base-section>
