@@ -99,7 +99,7 @@
             reverse
             :items="centers[selected_city]"
             :error-messages="selectCenterErrors"
-            label="السنتر"
+            label="المنطقة"
             required
             :disabled="selected_city == null"
             @input="$v.selected_center.$touch()"
@@ -174,7 +174,6 @@
   import { validationMixin } from 'vuelidate'
   import { required, maxLength, email, numeric } from 'vuelidate/lib/validators'
   import axios from 'axios'
-  // const price = 50
   export default {
     name: 'SectionCourseReservation',
     components: {},
@@ -221,7 +220,7 @@
         ],
         الجيزة: ['الدقي', 'اكتوبر', 'الهرم', 'حدايق الأهرام'],
         الاسكندرية: ['سيدي بشر'],
-        المنصورة: ['ابن خالدون'],
+        المنصورة: ['شارع المدارس'],
       },
 
       checkbox: false,
@@ -314,7 +313,10 @@
         data.append('cartItems[0][name]', `${this.selected_course} - حجز قدرات`)
         data.append('cartItems[0][price]', this.price)
         data.append('cartItems[0][quantity]', '1')
-        data.append('cartTotal', this.price)
+        data.append('cartItems[1][name]', 'مصاريف ادارية')
+        data.append('cartItems[1][price]', 5)
+        data.append('cartItems[1][quantity]', '1')
+        data.append('cartTotal', this.price + 5)
         data.append('shipping', '0')
         data.append('customer[first_name]', this.firstName)
         data.append('customer[last_name]', this.lastName)
