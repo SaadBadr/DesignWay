@@ -16,13 +16,13 @@
           <base-subheading
             class="text-right"
             weight="regular"
-            title="طريقك للفرشة"
+            title="طريقك لاجتيار"
           />
 
           <base-heading
             class="text-right"
             size="text-h2"
-            title="يا أرت انت يا جميل"
+            title="امتحان القدرات"
             weight="medium"
           />
 
