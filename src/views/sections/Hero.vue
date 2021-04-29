@@ -44,6 +44,8 @@
               class="pa-1"
               height="auto"
               text
+              href="https://www.facebook.com/218476249036271/posts/768885087328715/?sfnsn=scwspmo"
+              target="_blank"
             >
               معلومات اكتر؟
             </base-btn>
