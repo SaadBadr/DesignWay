@@ -16,7 +16,7 @@
           <base-subheading
             class="text-right"
             weight="regular"
-            title="طريقك لاجتيار"
+            title="طريقك لاجتياز"
           />
 
           <base-heading
