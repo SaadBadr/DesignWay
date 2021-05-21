@@ -46,15 +46,6 @@
             @blur="$v.phone.$touch()"
           />
 
-          <v-text-field
-            v-model="email"
-            reverse
-            :error-messages="emailErrors"
-            label="الايميل"
-            required
-            @input="$v.email.$touch()"
-            @blur="$v.email.$touch()"
-          />
           <v-select
             v-model="selected_course"
             reverse
@@ -82,13 +73,20 @@
               يتم خصم سعر الحجز من اجمالي قيمة الكورس
             </v-card-subtitle>
           </div>
-
+          <v-container class="d-flex justify-center">
+            <v-checkbox
+              v-model="online"
+              label="عايز الكورس اونلاين؟"
+              class="d-flex justify-end"
+            />
+          </v-container>
           <v-select
             v-model="selected_city"
             reverse
             :items="Object.keys(centers)"
             :error-messages="selectCityErrors"
             label="المحافظة"
+            :disabled="online"
             required
             @input="$v.selected_city.$touch()"
             @blur="$v.selected_city.$touch()"
@@ -101,9 +99,15 @@
             :error-messages="selectCenterErrors"
             label="المنطقة"
             required
-            :disabled="selected_city == null"
+            :disabled="selected_city == null || online"
             @input="$v.selected_center.$touch()"
             @blur="$v.selected_center.$touch()"
+          />
+
+          <v-text-field
+            v-model="code"
+            reverse
+            label="ٌReferal Code * (optional)"
           />
 
           <v-btn
@@ -135,14 +139,17 @@
           {{ phone }}
         </h4>
         <h4 class="text-right my-5">
-          {{ email }}
+          {{ code }}
         </h4>
 
         <h4 class="text-right my-5">
           {{ selected_course }} - {{ selected_center }}
         </h4>
 
-        <h4 class="text-right my-5">
+        <h4
+          v-if="!online"
+          class="text-right my-5"
+        >
           {{ selected_city }}: {{ selected_center }}
         </h4>
 
@@ -178,7 +185,7 @@
 
 <script>
   import { validationMixin } from 'vuelidate'
-  import { required, maxLength, email, numeric } from 'vuelidate/lib/validators'
+  import { required, maxLength, numeric } from 'vuelidate/lib/validators'
   import axios from 'axios'
   export default {
     name: 'SectionCourseReservation',
@@ -188,17 +195,16 @@
     validations: {
       firstName: { required, maxLength: maxLength(15) },
       lastName: { required, maxLength: maxLength(15) },
-      email: { required, email },
       selected_course: { required },
-      selected_city: { required },
-      selected_center: { required },
+      selected_city: {},
+      selected_center: {},
       phone: { required, numeric, maxLength: maxLength(11) },
     },
 
     data: () => ({
       firstName: '',
       lastName: '',
-      email: '',
+      code: '',
       phone: '',
       nextPage: false,
       selected_course: null,
@@ -220,7 +226,6 @@
           'شبرا',
           'العبور',
           'حلمية الزيتون',
-          'حدايق الزيتون',
           'حلوان',
           'حدايق حلوان',
         ],
@@ -229,18 +234,12 @@
         المنصورة: ['المنصورة'],
       },
 
-      checkbox: false,
+      online: false,
     }),
 
     computed: {
       price () {
         return 50
-      },
-      checkboxErrors () {
-        const errors = []
-        if (!this.$v.checkbox.$dirty) return errors
-        !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-        return errors
       },
       selectCourseErrors () {
         const errors = []
@@ -251,12 +250,14 @@
       },
       selectCityErrors () {
         const errors = []
+        if (this.online) return errors
         if (!this.$v.selected_city.$dirty) return errors
         !this.$v.selected_city.required && errors.push('من فضلك قم باختيار مناسب')
         return errors
       },
       selectCenterErrors () {
         const errors = []
+        if (this.online) return errors
         if (!this.$v.selected_center.$dirty) return errors
         !this.$v.selected_center.required &&
           errors.push('من فضلك قم باختيار مناسب')
@@ -288,30 +289,25 @@
         !this.$v.phone.numeric && errors.push('تأكد من كتابة رقم صحيح')
         return errors
       },
-      emailErrors () {
-        const errors = []
-        if (!this.$v.email.$dirty) return errors
-        !this.$v.email.email && errors.push('تأكد من كتابة بريد الالكتروني صحيح')
-        !this.$v.email.required && errors.push('من فضلك ادخل البريد الالكتروني')
-        return errors
-      },
     },
     methods: {
       submit () {
         this.$v.$touch()
-
-        if (this.$v.$invalid) return
+        if (
+          this.$v.$invalid ||
+          (!this.online && (!this.selected_center || !this.selected_city))
+        ) { return }
         this.nextPage = true
       },
       clear () {
         this.$v.$reset()
         this.firstName = ''
         this.lastName = ''
-        this.email = ''
+        this.code = ''
         this.selected_course = null
         this.selected_city = null
         this.selected_center = null
-        this.checkbox = false
+        this.online = false
       },
       payment () {
         var data = new FormData()
@@ -330,7 +326,9 @@
         data.append('customer[phone]', this.phone)
         data.append(
           'customer[address]',
-          `${this.selected_center} - ${this.selected_city}`,
+          this.online
+            ? 'اونلاين'
+            : `${this.selected_center} - ${this.selected_city}`,
         )
         data.append('redirectUrl', 'http://www.designwaycourses.com/')
         data.append('currency', 'EGP')
