@@ -133,7 +133,7 @@
           <u> تفاصيل الحجز </u>
         </h1>
         <h4 class="text-right my-5">
-          {{ name }}
+          {{ `${firstName} ${lastName}` }}
         </h4>
         <h4 class="text-right my-5">
           {{ phone }}
@@ -143,7 +143,7 @@
         </h4>
 
         <h4 class="text-right my-5">
-          {{ selected_course }} - {{ selected_center }}
+          {{ selected_course }} {{ online ? 'اونلاين' : selected_center }}
         </h4>
 
         <h4
@@ -250,16 +250,15 @@
       },
       selectCityErrors () {
         const errors = []
-        if (this.online) return errors
         if (!this.$v.selected_city.$dirty) return errors
-        !this.$v.selected_city.required && errors.push('من فضلك قم باختيار مناسب')
+        !(this.$v.selected_city.required || !this.online) &&
+          errors.push('من فضلك قم باختيار مناسب')
         return errors
       },
       selectCenterErrors () {
         const errors = []
-        if (this.online) return errors
         if (!this.$v.selected_center.$dirty) return errors
-        !this.$v.selected_center.required &&
+        !(this.$v.selected_center.required || !this.online) &&
           errors.push('من فضلك قم باختيار مناسب')
         return errors
       },
@@ -296,7 +295,9 @@
         if (
           this.$v.$invalid ||
           (!this.online && (!this.selected_center || !this.selected_city))
-        ) { return }
+        ) {
+          return
+        }
         this.nextPage = true
       },
       clear () {
@@ -322,7 +323,7 @@
         data.append('shipping', '0')
         data.append('customer[first_name]', this.firstName)
         data.append('customer[last_name]', this.lastName)
-        data.append('customer[email]', this.email)
+        data.append('customer[email]', this.code || '')
         data.append('customer[phone]', this.phone)
         data.append(
           'customer[address]',
