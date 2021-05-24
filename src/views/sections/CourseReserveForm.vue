@@ -161,11 +161,13 @@
           outlined
           color="success"
           class=" mr-4"
+          :disabled="waitingForApiResponse"
           @click="payment"
         >
           استمرار للدفع
         </v-btn>
         <v-btn
+          :disabled="waitingForApiResponse"
           outlined
           color="error"
           class="mr-4"
@@ -206,6 +208,7 @@
       lastName: '',
       code: '',
       phone: '',
+      waitingForApiResponse: false,
       nextPage: false,
       selected_course: null,
       selected_city: null,
@@ -299,18 +302,21 @@
           return
         }
         this.nextPage = true
+        this.waitingForApiResponse = false
       },
       clear () {
         this.$v.$reset()
         this.firstName = ''
         this.lastName = ''
         this.code = ''
+        this.waitingForApiResponse = false
         this.selected_course = null
         this.selected_city = null
         this.selected_center = null
         this.online = false
       },
-      payment () {
+      async payment () {
+        this.waitingForApiResponse = true
         var data = new FormData()
         data.append('vendorKey', process.env.VUE_APP_FAWATERK_API_KEY)
         data.append('cartItems[0][name]', `${this.selected_course} - حجز قدرات`)
@@ -344,13 +350,14 @@
           data: data,
         }
 
-        axios(config)
-          .then(function (response) {
-            window.location.href = response.data.url
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        try {
+          const response = await axios(config)
+          if (response.data.error) throw new Error('من فضلك حاول مرة اخرى')
+          window.location.href = response.data.url
+        } catch (error) {
+          alert(error.message)
+          this.waitingForApiResponse = false
+        }
       },
     },
   }
