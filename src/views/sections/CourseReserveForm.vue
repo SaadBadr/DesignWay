@@ -117,7 +117,7 @@
           <v-text-field
             v-model="code"
             reverse
-            label="ٌReferal Code * (optional)"
+            label="Referal Code * (optional)"
           />
 
           <v-btn

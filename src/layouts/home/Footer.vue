@@ -40,7 +40,7 @@
           cols="12"
           md="6"
         >
-          Copyright &copy; 2021
+          Copyright &copy; {{ new Date().getFullYear() }}
           <a
             title="SaadBadr23@gmail.com"
             href="https://www.linkedin.com/in/saadbadr"
