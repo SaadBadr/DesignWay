@@ -46,6 +46,16 @@
             @blur="$v.phone.$touch()"
           />
 
+          <v-text-field
+            v-model="email"
+            reverse
+            :error-messages="emailErrors"
+            label="الايميل"
+            required
+            @input="$v.email.$touch()"
+            @blur="$v.email.$touch()"
+          />
+
           <v-select
             v-model="selected_course"
             reverse
@@ -139,6 +149,9 @@
           {{ phone }}
         </h4>
         <h4 class="text-right my-5">
+          {{ email }}
+        </h4>
+        <h4 class="text-right my-5">
           {{ code }}
         </h4>
 
@@ -187,7 +200,7 @@
 
 <script>
   import { validationMixin } from 'vuelidate'
-  import { required, maxLength, numeric } from 'vuelidate/lib/validators'
+  import { required, maxLength, email, numeric } from 'vuelidate/lib/validators'
   import axios from 'axios'
   export default {
     name: 'SectionCourseReservation',
@@ -198,15 +211,21 @@
       firstName: { required, maxLength: maxLength(15) },
       lastName: { required, maxLength: maxLength(15) },
       selected_course: { required },
+      email: { required, email },
       selected_city: {},
       selected_center: {},
-      phone: { required, numeric, maxLength: maxLength(11) },
+      phone: {
+        required,
+        numeric,
+        specified_length: p => p?.length === 11,
+      },
     },
 
     data: () => ({
       firstName: '',
       lastName: '',
       code: '',
+      email: '',
       phone: '',
       waitingForApiResponse: false,
       nextPage: false,
@@ -286,9 +305,19 @@
       phoneErrors () {
         const errors = []
         if (!this.$v.phone.$dirty) return errors
-        !this.$v.phone.maxLength && errors.push('لا يجب ان يزيد الرقم عن 11 حرف')
         !this.$v.phone.required && errors.push('من فضلك ادخل رقمك')
-        !this.$v.phone.numeric && errors.push('تأكد من كتابة رقم صحيح')
+        !this.$v.phone.numeric &&
+          errors.push('تأكد من كتابة رقم صحيح، مثال: 01234567890')
+        !this.$v.phone.specified_length &&
+          errors.push('يجب ان يتكون الموبيل من 11 رقم')
+        return errors
+      },
+
+      emailErrors () {
+        const errors = []
+        if (!this.$v.email.$dirty) return errors
+        !this.$v.email.email && errors.push('تأكد من كتابة بريد الالكتروني صحيح')
+        !this.$v.email.required && errors.push('من فضلك ادخل البريد الالكتروني')
         return errors
       },
     },
@@ -309,6 +338,7 @@
         this.firstName = ''
         this.lastName = ''
         this.code = ''
+        this.email = ''
         this.waitingForApiResponse = false
         this.selected_course = null
         this.selected_city = null
@@ -318,8 +348,9 @@
       async payment () {
         this.waitingForApiResponse = true
         var data = new FormData()
+        const item = this.selected_course + (this.code ? ' - ' + this.code : '')
         data.append('vendorKey', process.env.VUE_APP_FAWATERK_API_KEY)
-        data.append('cartItems[0][name]', `${this.selected_course} - حجز قدرات`)
+        data.append('cartItems[0][name]', item)
         data.append('cartItems[0][price]', this.price)
         data.append('cartItems[0][quantity]', '1')
         data.append('cartItems[1][name]', 'مصاريف ادارية')
@@ -329,7 +360,7 @@
         data.append('shipping', '0')
         data.append('customer[first_name]', this.firstName)
         data.append('customer[last_name]', this.lastName)
-        data.append('customer[email]', this.code || '')
+        data.append('customer[email]', this.email)
         data.append('customer[phone]', this.phone)
         data.append(
           'customer[address]',
