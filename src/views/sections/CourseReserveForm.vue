@@ -83,20 +83,13 @@
               يتم خصم سعر الحجز من اجمالي قيمة الكورس
             </v-card-subtitle>
           </div>
-          <v-container class="d-flex justify-center">
-            <v-checkbox
-              v-model="online"
-              label="عايز الكورس اونلاين؟"
-              class="d-flex justify-end"
-            />
-          </v-container>
+
           <v-select
             v-model="selected_city"
             reverse
             :items="Object.keys(centers)"
             :error-messages="selectCityErrors"
             label="المحافظة"
-            :disabled="online"
             required
             @input="$v.selected_city.$touch()"
             @blur="$v.selected_city.$touch()"
@@ -109,7 +102,7 @@
             :error-messages="selectCenterErrors"
             label="المنطقة"
             required
-            :disabled="selected_city == null || online"
+            :disabled="selected_city == null"
             @input="$v.selected_center.$touch()"
             @blur="$v.selected_center.$touch()"
           />
@@ -156,13 +149,10 @@
         </h4>
 
         <h4 class="text-right my-5">
-          {{ selected_course }} {{ online ? 'اونلاين' : selected_center }}
+          {{ selected_course }} {{ selected_center }}
         </h4>
 
-        <h4
-          v-if="!online"
-          class="text-right my-5"
-        >
+        <h4 class="text-right my-5">
           {{ selected_city }}: {{ selected_center }}
         </h4>
 
@@ -255,8 +245,6 @@
         الاسكندرية: ['سيدي بشر'],
         المنصورة: ['المنصورة'],
       },
-
-      online: false,
     }),
 
     computed: {
@@ -273,14 +261,13 @@
       selectCityErrors () {
         const errors = []
         if (!this.$v.selected_city.$dirty) return errors
-        !(this.$v.selected_city.required || !this.online) &&
-          errors.push('من فضلك قم باختيار مناسب')
+        !this.$v.selected_city.required && errors.push('من فضلك قم باختيار مناسب')
         return errors
       },
       selectCenterErrors () {
         const errors = []
         if (!this.$v.selected_center.$dirty) return errors
-        !(this.$v.selected_center.required || !this.online) &&
+        !this.$v.selected_center.required &&
           errors.push('من فضلك قم باختيار مناسب')
         return errors
       },
@@ -324,10 +311,7 @@
     methods: {
       submit () {
         this.$v.$touch()
-        if (
-          this.$v.$invalid ||
-          (!this.online && (!this.selected_center || !this.selected_city))
-        ) {
+        if (this.$v.$invalid || !this.selected_center || !this.selected_city) {
           return
         }
         this.nextPage = true
@@ -343,7 +327,6 @@
         this.selected_course = null
         this.selected_city = null
         this.selected_center = null
-        this.online = false
       },
       async payment () {
         this.waitingForApiResponse = true
@@ -364,9 +347,7 @@
         data.append('customer[phone]', this.phone)
         data.append(
           'customer[address]',
-          this.online
-            ? 'اونلاين'
-            : `${this.selected_center} - ${this.selected_city}`,
+          `${this.selected_center} - ${this.selected_city}`,
         )
         data.append('redirectUrl', 'http://www.designwaycourses.com/')
         data.append('currency', 'EGP')
