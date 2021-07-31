@@ -22,6 +22,15 @@
           background-color="transparent"
         >
           <v-tab
+            href="http://elearn.designwaycourses.com"
+            class="font-weight-bold"
+            :ripple="false"
+            min-width="96"
+          >
+            التعليم الالكتروني
+          </v-tab>
+
+          <v-tab
             v-for="(item, i) in items"
             :key="i"
             :to="item.route"
