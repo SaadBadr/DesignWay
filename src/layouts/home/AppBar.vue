@@ -22,7 +22,7 @@
           background-color="transparent"
         >
           <v-tab
-            href="http://elearn.designwaycourses.com"
+            href="https://elearn.designwaycourses.com"
             class="font-weight-bold"
             :ripple="false"
             min-width="96"
