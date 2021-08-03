@@ -16,7 +16,42 @@
       />
       <v-spacer />
 
-      <div>
+      <!-- Burger navigation menu for sm devices -->
+
+      <template v-if="$vuetify.breakpoint.smAndDown">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <v-app-bar-nav-icon
+              v-bind="attrs"
+              v-on="on"
+            />
+          </template>
+          <v-list
+            nav
+            dense
+          >
+            <v-list-item-group
+              v-model="group"
+              active-class="deep-purple--text text--accent-4"
+            >
+              <v-list-item
+                v-for="(item, i) in items.slice().reverse()"
+                :key="i"
+                :to="item.route"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+              <v-list-item href="https://elearn.designwaycourses.com">
+                <v-list-item-title>التعليم الالكتروني</v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+      </template>
+
+      <!-- normal navigation menu for sm devices -->
+
+      <div v-else>
         <v-tabs
           optional
           background-color="transparent"
