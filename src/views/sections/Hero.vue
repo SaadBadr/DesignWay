@@ -32,6 +32,29 @@
 
           <div
             :class="
+              $vuetify.breakpoint.smAndDown ? 'flex-column' : 'align-right'
+            "
+            class="d-flex flex-wrap mb-4"
+          >
+            <v-spacer />
+
+            <base-btn
+              class="ma-1"
+              to="course-reservation"
+            >
+              الكورسات في السناتر
+            </base-btn>
+
+            <base-btn
+              class="ma-1"
+              href="https://elearn.designwaycourses.com/"
+            >
+              الكورسات الاونلاين
+            </base-btn>
+          </div>
+
+          <div
+            :class="
               $vuetify.breakpoint.smAndDown
                 ? 'flex-column align-'
                 : 'align-right'
@@ -48,11 +71,6 @@
               target="_blank"
             >
               معلومات اكتر؟
-            </base-btn>
-
-            <span class="font-weight-bold ml-6 mr-4 my-4" />
-            <base-btn to="course-reservation">
-              حجز الكورسات
             </base-btn>
           </div>
         </v-responsive>
